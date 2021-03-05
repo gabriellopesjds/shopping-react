@@ -4,33 +4,21 @@ import AppHeader from '../AppHeader'
 import AppContainer from '../AppContainer/AppContainer'
 import LineChart from '../../shared/LineChart'
 import ShoppingList from '../ShoppingList'
-import productsMock from '../../mocks/products.json'
 import extractPercentage from '../../utils/extractPercentage'
+import { selectAllProductsSelected, selectTotalAllProductsSelected } from '../../store/Products/Products.selectors'
+import { useDispatch, useSelector } from 'react-redux'
+import { toggleProduct} from '../../store/Products/Products.actions'
 
 
 function App(){
 
-    const [products, setProducts] = useState(productsMock.products)
-    const [selectedProducts, setSelectedProducts] = useState([])
-    const [totalPrice, setTotalPrice] = useState(0)
+    const selectedProducts = useSelector(selectAllProductsSelected)
+    const totalPrice = useSelector(selectTotalAllProductsSelected)
     
-    useEffect(() => {
-        const newProducts = products
-            .filter(element => element.checked)
-
-        setSelectedProducts(newProducts)
-    }, [products])
-
-    useEffect(() => {
-        const total = selectedProducts
-            .map(p => p.price)
-            .reduce((a,b) => a + b, 0);
-
-        setTotalPrice(total)
-    }, [selectedProducts])
-
+    const dispath = useDispatch();
+    
     function handleOnClick(id){
-        setProducts(products.map((element) => element.id === id ? { ...element, checked: !element.checked} : element))
+        dispath(toggleProduct(id))
     }
 
     return <Wrapper>
@@ -41,16 +29,16 @@ function App(){
                     <div> 
                         <ShoppingList 
                             title = "Sua lista de compras"
-                            products={products}
-                            onClick={handleOnClick}/>
+                            onClick={handleOnClick}
+                            displayOnlySelected = {false}/>
                     </div>
                 }
                 middle = { 
                     <div> 
                         <ShoppingList 
                             title = "Lista de compra"
-                            products={selectedProducts}
-                            onClick={handleOnClick}/>
+                            onClick={handleOnClick}
+                            displayOnlySelected = {true}/>
                     </div>
                 }
                 right = { 

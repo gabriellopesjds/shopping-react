@@ -1,5 +1,5 @@
 import React from 'react'
-import {Wrapper, Indicator} from './CheckboxShared.style'
+import {Wrapper, Indicator} from './CheckboxShared.styles'
 
 function CheckboxShared({ value, title, onClick }){
     return <Wrapper onClick={onClick}>
